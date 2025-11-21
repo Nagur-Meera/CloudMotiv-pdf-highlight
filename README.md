@@ -140,6 +140,52 @@ npm run build
 
 The built files will be in the `dist/` directory, ready for deployment.
 
+## Deployment
+
+### Deploy to Vercel
+
+This project is ready for deployment on Vercel. You can deploy it in two ways:
+
+#### Option 1: Deploy via Vercel Dashboard (Recommended)
+
+1. **Connect to Vercel**
+   - Go to [vercel.com](https://vercel.com) and sign in with your GitHub account
+   - Click "Add New Project"
+   - Select your `CloudMotiv-pdf-highlight` repository
+   - Vercel will automatically detect it's a Vite React app
+
+2. **Configure Build Settings** (Usually auto-detected)
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+   - Install Command: `npm install`
+
+3. **Deploy**
+   - Click "Deploy" and wait for the build to complete
+   - Your app will be live at `https://your-project-name.vercel.app`
+
+#### Option 2: Deploy via Vercel CLI
+
+```bash
+# Install Vercel CLI globally
+npm install -g vercel
+
+# Login to Vercel
+vercel login
+
+# Deploy from your project directory
+cd pdf-highlight
+vercel
+
+# Follow the prompts to configure and deploy
+```
+
+### GitHub Repository
+
+The project is hosted on GitHub at:
+```
+https://github.com/Nagur-Meera/CloudMotiv-pdf-highlight.git
+```
+
 ## Contributing
 
 1. Fork the repository
