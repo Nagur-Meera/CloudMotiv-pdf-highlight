@@ -118,6 +118,7 @@ export default function App() {
   // Utility: clear highlights
   function clearHighlights() {
     document.querySelectorAll('.highlight').forEach(h => h.remove());
+    document.querySelectorAll('.yellow-highlight').forEach(h => h.remove());
   }
 
   // Utility: create highlight on a page
@@ -243,7 +244,7 @@ export default function App() {
       return;
     }
     console.log('[1] Found on page:', found.page, 'at coordinates:', found.rect);
-    createHighlight(found.page, found.rect);
+    createYellowHighlight(found.page, found.rect);
     const pageEl = document.querySelector(`.pageContainer[data-page-number="${found.page}"]`);
     if (pageEl) pageEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
@@ -266,32 +267,189 @@ export default function App() {
       return;
     }
     console.log('[2] Found on page:', found.page, 'at coordinates:', found.rect);
-    createHighlight(found.page, found.rect);
+    createYellowHighlight(found.page, found.rect);
     const pageEl = document.querySelector(`.pageContainer[data-page-number="${found.page}"]`);
     if (pageEl) pageEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
-  // click handler for [3]
+  // click handler for [3] - highlight complete table row
   function onRef3Click() {
     clearHighlights();
     
-    // Debug: log page 15 text content to console
+    const found = findCompleteTableRow('Gain on sale of non-current assets', 15);
+    if (!found) {
+      alert('Table row "Gain on sale of non-current assets, etc., net" not found on page 15');
+      return;
+    }
+    
+    console.log('[3] Found complete table row on page:', found.page, 'at coordinates:', found.rect);
+    createYellowHighlight(found.page, found.rect);
+    const pageEl = document.querySelector(`.pageContainer[data-page-number="${found.page}"]`);
+    if (pageEl) pageEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // Simple yellow highlight for specific phrase
+  function highlightGainOnSale() {
+    clearHighlights();
+    
     const pages = pageTextBoxesRef.current;
     if (pages[15]) {
       const page15Text = pages[15].map(box => box.str).join('');
       console.log('Page 15 text content:', page15Text);
-      console.log('Looking for variations of "Gain on sale of non-current assets, etc., net 25 208"...');
+      console.log('Looking for "Gain on sale of non-current assets, etc., net"...');
     }
     
-    const found = findPhrase(PHRASE_3, 3);
+    // Simple search for the exact phrase
+    const phrase = 'Gain on sale of non-current assets, etc., net';
+    const found = findSimplePhrase(phrase, 15);
     if (!found) {
-      alert('Phrase not found. If PDF is scanned/image-only, enable OCR fallback or use the image-based highlight.');
+      alert('Phrase not found. The text may be formatted differently.');
       return;
     }
-    console.log('[3] Found on page:', found.page, 'at coordinates:', found.rect);
-    createHighlight(found.page, found.rect);
+    console.log('Found "Gain on sale..." on page:', found.page, 'at coordinates:', found.rect);
+    createYellowHighlight(found.page, found.rect);
     const pageEl = document.querySelector(`.pageContainer[data-page-number="${found.page}"]`);
     if (pageEl) pageEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  // Find complete table row for highlighting
+  function findCompleteTableRow(startPhrase, pageNumber) {
+    const pages = pageTextBoxesRef.current;
+    const pKey = pageNumber.toString();
+    
+    if (!pages[pKey]) return null;
+    
+    const boxes = pages[pKey];
+    const lowerStartPhrase = startPhrase.toLowerCase();
+    
+    console.log('Searching for table row starting with:', startPhrase, 'on page:', pageNumber);
+    
+    // Find the starting phrase first
+    for (let i = 0; i < boxes.length; i++) {
+      let concat = '';
+      const startBoxes = [];
+      
+      // Look for the starting phrase
+      for (let j = i; j < Math.min(i + 8, boxes.length); j++) {
+        concat += boxes[j].str + ' ';
+        startBoxes.push(boxes[j]);
+        
+        const concatLower = concat.toLowerCase().replace(/[,\.]/g, '').replace(/\s+/g, ' ').trim();
+        
+        if (concatLower.includes(lowerStartPhrase)) {
+          console.log('Found start of table row:', concatLower.substring(0, 50) + '...');
+          
+          // Now extend to include the entire row (numbers in same horizontal line)
+          const baseY = startBoxes[0].top;
+          const tolerance = 5; // pixels tolerance for same row
+          
+          let minLeft = Infinity, maxRight = -Infinity;
+          let minTop = Infinity, maxBottom = -Infinity;
+          
+          // Include all boxes in the same horizontal line
+          for (let k = 0; k < boxes.length; k++) {
+            const box = boxes[k];
+            if (Math.abs(box.top - baseY) <= tolerance) {
+              minLeft = Math.min(minLeft, box.left);
+              maxRight = Math.max(maxRight, box.left + box.width);
+              minTop = Math.min(minTop, box.top);
+              maxBottom = Math.max(maxBottom, box.top + box.height);
+            }
+          }
+          
+          return {
+            page: pageNumber,
+            rect: {
+              left: minLeft,
+              top: minTop,
+              width: maxRight - minLeft,
+              height: maxBottom - minTop
+            }
+          };
+        }
+      }
+    }
+    
+    console.log('Table row not found on page', pageNumber);
+    return null;
+  }
+  function findSimplePhrase(phrase, pageNumber) {
+    const pages = pageTextBoxesRef.current;
+    const pKey = pageNumber.toString();
+    
+    if (!pages[pKey]) return null;
+    
+    const boxes = pages[pKey];
+    const lowerPhrase = phrase.toLowerCase().replace(/[,\.]/g, '').replace(/\s+/g, ' ').trim();
+    
+    console.log('Searching for phrase:', lowerPhrase, 'on page:', pageNumber);
+    
+    for (let i = 0; i < boxes.length; i++) {
+      let concat = '';
+      const windowBoxes = [];
+      
+      // Look at a larger window to catch the phrase
+      for (let j = i; j < Math.min(i + 15, boxes.length); j++) {
+        concat += boxes[j].str + ' ';
+        windowBoxes.push(boxes[j]);
+        
+        const concatLower = concat.toLowerCase().replace(/[,\.]/g, '').replace(/\s+/g, ' ').trim();
+        
+        // Check if our phrase is in the current window
+        if (concatLower.includes(lowerPhrase)) {
+          console.log('Found phrase in window:', concatLower.substring(0, 100) + '...');
+          
+          // Calculate tight bounding box around just the relevant text
+          let minLeft = Infinity, minTop = Infinity, maxRight = -Infinity, maxBottom = -Infinity;
+          
+          // Use only the boxes that likely contain our phrase
+          const relevantBoxes = windowBoxes.slice(0, Math.min(8, windowBoxes.length));
+          relevantBoxes.forEach(b => {
+            minLeft = Math.min(minLeft, b.left);
+            minTop = Math.min(minTop, b.top);
+            maxRight = Math.max(maxRight, b.left + b.width);
+            maxBottom = Math.max(maxBottom, b.top + b.height);
+          });
+          
+          return { 
+            page: pageNumber, 
+            rect: { 
+              left: minLeft, 
+              top: minTop, 
+              width: maxRight - minLeft, 
+              height: maxBottom - minTop 
+            } 
+          };
+        }
+        
+        // If concat gets too long, break to avoid excessive searching
+        if (concat.length > 200) break;
+      }
+    }
+    
+    console.log('Phrase not found on page', pageNumber);
+    return null;
+  }
+
+  // Create yellow highlight
+  function createYellowHighlight(pageNumber, rect) {
+    const pageContainer = document.querySelector(`.pageContainer[data-page-number="${pageNumber}"]`);
+    if (!pageContainer) return;
+    
+    const h = document.createElement('div');
+    h.className = 'yellow-highlight';
+    h.style.left = rect.left + 'px';
+    h.style.top = rect.top + 'px';
+    h.style.width = rect.width + 'px';
+    h.style.height = rect.height + 'px';
+    h.style.position = 'absolute';
+    h.style.backgroundColor = 'rgba(255, 235, 59, 0.6)';
+    h.style.border = '1px solid rgba(255, 193, 7, 0.8)';
+    h.style.borderRadius = '3px';
+    h.style.pointerEvents = 'none';
+    h.style.zIndex = '10';
+    
+    pageContainer.appendChild(h);
   }
 
   return (
