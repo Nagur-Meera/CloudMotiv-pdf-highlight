@@ -295,81 +295,113 @@ export default function App() {
   }
 
   return (
-    <div className="app-root" style={{ display: 'flex', gap: 16, padding: 12 }}>
-      <div id="left" style={{ width: '72%', height: '92vh', overflow: 'auto', border: '1px solid #ddd', padding: 8 }}>
-        <div ref={viewerRef} id="pdfViewer" />
-      </div>
-
-      <div id="right" style={{ width: '26%', height: '92vh', overflow: 'auto', border: '1px solid #ddd', padding: 12 }}>
-        <h3>Analysis</h3>
-        <p style={{ color: '#333', marginBottom: 16 }}>
-          No extraordinary or one-off items affecting EBITDA were reported in Maersk's Q2 2025 results.
-        </p>
-        <p style={{ color: '#333', lineHeight: 1.6, marginBottom: 16 }}>
-          The report explicitly notes that EBITDA improvements stemmed from operational performance—
-          including volume growth, cost control, and margin improvement across Ocean, Logistics &
-          Services, and Terminals segments <span onClick={onRef1Click} style={{ color: '#0a66c2', cursor: 'pointer', textDecoration: 'underline' }}>[1]</span><span onClick={onRef2Click} style={{ color: '#0a66c2', cursor: 'pointer', textDecoration: 'underline' }}>[2]</span>. Gains or losses from asset sales, which could qualify as
-          extraordinary items, are shown separately under EBIT and not included in EBITDA. The gain on
-          sale of non-current assets was USD 25 m in Q2 2025, significantly lower than USD 208 m in Q2
-          2024, but these affect EBIT, not EBITDA <span onClick={onRef3Click} style={{ color: '#0a66c2', cursor: 'pointer', textDecoration: 'underline' }}>[3]</span>. Hence, Q2 2025 EBITDA reflects core operating
-          activities without one-off extraordinary adjustments.
-        </p>
-
-        <h4>Findings</h4>
-        <div style={{ marginBottom: 16 }}>
-          <strong>Page 3 — Highlights Q2 2025</strong>
-          <p style={{ color: '#333', fontSize: 14, margin: '4px 0 12px 0' }}>
-            EBITDA increase (USD 2.3 bn vs USD 2.1 bn prior year) attributed to operational improvements; no
-            mention of extraordinary or one-off items. <span onClick={onRef1Click} style={{ color: '#0a66c2', cursor: 'pointer', textDecoration: 'underline' }}>[1]</span>
-          </p>
-          
-          <strong>Page 5 — Review Q2 2025</strong>
-          <p style={{ color: '#333', fontSize: 14, margin: '4px 0 12px 0' }}>
-            EBITDA rise driven by higher revenue and cost control across all segments; no extraordinary gains
-            or losses included. <span onClick={onRef2Click} style={{ color: '#0a66c2', cursor: 'pointer', textDecoration: 'underline' }}>[2]</span>
-          </p>
-          
-          <strong>Page 15 — Condensed Income Statement</strong>
-          <p style={{ color: '#333', fontSize: 14, margin: '4px 0 12px 0' }}>
-            Gain on sale of non-current assets USD 25 m (vs USD 208 m prior year) reported separately below
-            EBITDA; therefore, not part of EBITDA. <span onClick={onRef3Click} style={{ color: '#0a66c2', cursor: 'pointer', textDecoration: 'underline' }}>[3]</span>
-          </p>
+    <div className="app-root">
+      {/* Header */}
+      <header className="app-header">
+        <div className="header-content">
+          <div className="user-info">
+            <h1 className="app-title">PDF Highlight Analysis Tool</h1>
+            <div className="user-details">
+              <h2 className="user-name">Shaik Nagur Meeravali</h2>
+              <p className="user-email">nagurmeeravali_shaik@srmap.edu.in</p>
+            </div>
+          </div>
+          <div className="reference-controls">
+            <button className="ref-button ref-1" onClick={onRef1Click} aria-label="Highlight Reference 1">[1]</button>
+            <button className="ref-button ref-2" onClick={onRef2Click} aria-label="Highlight Reference 2">[2]</button>
+            <button className="ref-button ref-3" onClick={onRef3Click} aria-label="Highlight Reference 3">[3]</button>
+            <button className="clear-button" onClick={clearHighlights} aria-label="Clear all highlights">Clear</button>
+          </div>
         </div>
+      </header>
+      
+      {/* Main Content */}
+      <main className="main-content">
+        <div className="content-container">
+          <div className="pdf-section">
+            <div className="pdf-viewer">
+              <div ref={viewerRef} id="pdfViewer" />
+            </div>
+          </div>
 
-        <h4>Supporting Evidence</h4>
-        <div style={{ fontSize: 13, color: '#555' }}>
-          <p style={{ marginBottom: 12 }}>
-            <strong><span onClick={onRef1Click} style={{ color: '#0a66c2', cursor: 'pointer', textDecoration: 'underline' }}>[1]</span></strong> A.P. Moller – Maersk Q2 2025 Interim Report (7 Aug 2025) — Page 3
-          </p>
-          <blockquote style={{ margin: '0 0 16px 16px', padding: 8, backgroundColor: '#f8f9fa', borderLeft: '3px solid #dee2e6', fontStyle: 'italic' }}>
-            "Maersk's results continued to improve year-on-year ... EBITDA of USD 2.3 bn (USD 2.1 bn) ...
-            driven by volume and other revenue growth in Ocean, margin improvements in Logistics &
-            Services and significant top line growth in Terminals."
-          </blockquote>
-          
-          <p style={{ marginBottom: 12 }}>
-            <strong><span onClick={onRef2Click} style={{ color: '#0a66c2', cursor: 'pointer', textDecoration: 'underline' }}>[2]</span></strong> A.P. Moller – Maersk Q2 2025 Interim Report (7 Aug 2025) — Page 5
-          </p>
-          <blockquote style={{ margin: '0 0 16px 16px', padding: 8, backgroundColor: '#f8f9fa', borderLeft: '3px solid #dee2e6', fontStyle: 'italic' }}>
-            "EBITDA increased to USD 2.3 bn (USD 2.1 bn) ... driven by higher revenue and cost management
-            ... Ocean's EBITDA ... slightly increased by USD 36 m ... Logistics & Services contributed
-            significantly with a USD 71 m increase ... Terminals' EBITDA increased by USD 50 m."
-          </blockquote>
-          
-          <p style={{ marginBottom: 12 }}>
-            <strong><span onClick={onRef3Click} style={{ color: '#0a66c2', cursor: 'pointer', textDecoration: 'underline' }}>[3]</span></strong> A.P. Moller – Maersk Q2 2025 Interim Report (7 Aug 2025) — Page 15
-          </p>
-          <blockquote style={{ margin: '0 0 16px 16px', padding: 8, backgroundColor: '#f8f9fa', borderLeft: '3px solid #dee2e6', fontStyle: 'italic' }}>
-            "Gain on sale of non-current assets, etc., net 25 (208) ... Profit before depreciation, amortisation
-            and impairment losses, etc. (EBITDA) 2,298"
-          </blockquote>
-        </div>
+          <div className="analysis-section">
+            <h3>Analysis</h3>
+            <p className="summary">
+              No extraordinary or one-off items affecting EBITDA were reported in Maersk's Q2 2025 results.
+            </p>
+            <p className="description">
+              The report explicitly notes that EBITDA improvements stemmed from operational performance—
+              including volume growth, cost control, and margin improvement across Ocean, Logistics &
+              Services, and Terminals segments <span onClick={onRef1Click} className="ref-link">[1]</span><span onClick={onRef2Click} className="ref-link">[2]</span>. Gains or losses from asset sales, which could qualify as
+              extraordinary items, are shown separately under EBIT and not included in EBITDA. The gain on
+              sale of non-current assets was USD 25 m in Q2 2025, significantly lower than USD 208 m in Q2
+              2024, but these affect EBIT, not EBITDA <span onClick={onRef3Click} className="ref-link">[3]</span>. Hence, Q2 2025 EBITDA reflects core operating
+              activities without one-off extraordinary adjustments.
+            </p>
 
-        <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid #eee' }}>
-          <strong>PDF path:</strong>
-          <div style={{ fontSize: 12, color: '#666', marginTop: 4 }}>{PDF_URL}</div>
+            <h4>Findings</h4>
+            <div className="findings">
+              <div className="finding-item">
+                <strong>Page 3 — Highlights Q2 2025</strong>
+                <p>
+                  EBITDA increase (USD 2.3 bn vs USD 2.1 bn prior year) attributed to operational improvements; no
+                  mention of extraordinary or one-off items. <span onClick={onRef1Click} className="ref-link">[1]</span>
+                </p>
+              </div>
+              
+              <div className="finding-item">
+                <strong>Page 5 — Review Q2 2025</strong>
+                <p>
+                  EBITDA rise driven by higher revenue and cost control across all segments; no extraordinary gains
+                  or losses included. <span onClick={onRef2Click} className="ref-link">[2]</span>
+                </p>
+              </div>
+              
+              <div className="finding-item">
+                <strong>Page 15 — Condensed Income Statement</strong>
+                <p>
+                  Gain on sale of non-current assets USD 25 m (vs USD 208 m prior year) reported separately below
+                  EBITDA; therefore, not part of EBITDA. <span onClick={onRef3Click} className="ref-link">[3]</span>
+                </p>
+              </div>
+            </div>
+
+            <h4>Supporting Evidence</h4>
+            <div className="evidence">
+              <div className="evidence-item">
+                <p><strong><span onClick={onRef1Click} className="ref-link">[1]</span></strong> A.P. Moller – Maersk Q2 2025 Interim Report (7 Aug 2025) — Page 3</p>
+                <blockquote>
+                  "Maersk's results continued to improve year-on-year ... EBITDA of USD 2.3 bn (USD 2.1 bn) ...
+                  driven by volume and other revenue growth in Ocean, margin improvements in Logistics &
+                  Services and significant top line growth in Terminals."
+                </blockquote>
+              </div>
+              
+              <div className="evidence-item">
+                <p><strong><span onClick={onRef2Click} className="ref-link">[2]</span></strong> A.P. Moller – Maersk Q2 2025 Interim Report (7 Aug 2025) — Page 5</p>
+                <blockquote>
+                  "EBITDA increased to USD 2.3 bn (USD 2.1 bn) ... driven by higher revenue and cost management
+                  ... Ocean's EBITDA ... slightly increased by USD 36 m ... Logistics & Services contributed
+                  significantly with a USD 71 m increase ... Terminals' EBITDA increased by USD 50 m."
+                </blockquote>
+              </div>
+              
+              <div className="evidence-item">
+                <p><strong><span onClick={onRef3Click} className="ref-link">[3]</span></strong> A.P. Moller – Maersk Q2 2025 Interim Report (7 Aug 2025) — Page 15</p>
+                <blockquote>
+                  "Gain on sale of non-current assets, etc., net 25 (208) ... Profit before depreciation, amortisation
+                  and impairment losses, etc. (EBITDA) 2,298"
+                </blockquote>
+              </div>
+            </div>
+
+            <div className="pdf-info">
+              <strong>PDF path:</strong>
+              <div className="pdf-path">{PDF_URL}</div>
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
