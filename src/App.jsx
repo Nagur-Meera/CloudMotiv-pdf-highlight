@@ -306,12 +306,6 @@ export default function App() {
               <p className="user-email">nagurmeeravali_shaik@srmap.edu.in</p>
             </div>
           </div>
-          <div className="reference-controls">
-            <button className="ref-button ref-1" onClick={onRef1Click} aria-label="Highlight Reference 1">[1]</button>
-            <button className="ref-button ref-2" onClick={onRef2Click} aria-label="Highlight Reference 2">[2]</button>
-            <button className="ref-button ref-3" onClick={onRef3Click} aria-label="Highlight Reference 3">[3]</button>
-            <button className="clear-button" onClick={clearHighlights} aria-label="Clear all highlights">Clear</button>
-          </div>
         </div>
       </header>
       

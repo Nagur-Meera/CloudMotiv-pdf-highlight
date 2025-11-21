@@ -23,106 +23,46 @@ body {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 1rem 2rem;
+  padding: 0.75rem 2rem;
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .header-content {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   max-width: 1400px;
   margin: 0 auto;
 }
 
+.user-info {
+  text-align: center;
+}
+
 .user-info .app-title {
-  font-size: 1.8rem;
-  font-weight: 700;
+  font-size: 1.4rem;
+  font-weight: 600;
   background: linear-gradient(135deg, #667eea, #764ba2);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 0.25rem;
-}
-
-.user-details .user-name {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #333;
   margin-bottom: 0.1rem;
 }
 
-.user-details .user-email {
+.user-details .user-name {
   font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.05rem;
+}
+
+.user-details .user-email {
+  font-size: 0.75rem;
   color: #666;
   font-weight: 400;
-}
-
-/* Reference Controls */
-.reference-controls {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-.ref-button, .clear-button {
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.ref-button {
-  background: linear-gradient(135deg, #4CAF50, #45a049);
-  color: white;
-  min-width: 50px;
-}
-
-.ref-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
-}
-
-.ref-button.ref-1 {
-  background: linear-gradient(135deg, #FF6B6B, #FF5252);
-}
-
-.ref-button.ref-1:hover {
-  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
-}
-
-.ref-button.ref-2 {
-  background: linear-gradient(135deg, #4ECDC4, #26C6DA);
-}
-
-.ref-button.ref-2:hover {
-  box-shadow: 0 8px 25px rgba(78, 205, 196, 0.3);
-}
-
-.ref-button.ref-3 {
-  background: linear-gradient(135deg, #45B7D1, #2196F3);
-}
-
-.ref-button.ref-3:hover {
-  box-shadow: 0 8px 25px rgba(69, 183, 209, 0.3);
-}
-
-.clear-button {
-  background: linear-gradient(135deg, #FF8A80, #FF5722);
-  color: white;
-}
-
-.clear-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 138, 128, 0.3);
 }
 
 /* Main Content */
@@ -138,7 +78,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 400px;
   gap: 2rem;
-  height: calc(100vh - 140px);
+  height: calc(100vh - 100px);
 }
 
 /* PDF Section */
@@ -351,12 +291,6 @@ body {
   }
   
   .header-content {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-  }
-  
-  .reference-controls {
     justify-content: center;
   }
   
@@ -367,25 +301,19 @@ body {
 
 @media (max-width: 768px) {
   .app-header {
-    padding: 1rem;
+    padding: 0.5rem 1rem;
   }
   
   .user-info .app-title {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
   
   .user-details .user-name {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
   
-  .reference-controls {
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  
-  .ref-button, .clear-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+  .user-details .user-email {
+    font-size: 0.7rem;
   }
   
   .content-container {
@@ -403,30 +331,16 @@ body {
 }
 
 @media (max-width: 480px) {
-  .header-content {
-    gap: 0.75rem;
-  }
-  
   .user-info .app-title {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
   
   .user-details .user-name {
-    font-size: 0.9rem;
+    font-size: 0.75rem;
   }
   
   .user-details .user-email {
-    font-size: 0.8rem;
-  }
-  
-  .reference-controls {
-    width: 100%;
-    justify-content: space-between;
-  }
-  
-  .ref-button, .clear-button {
-    flex: 1;
-    min-width: 0;
+    font-size: 0.65rem;
   }
   
   .content-container {
@@ -478,11 +392,6 @@ body {
 }
 
 /* Focus states for accessibility */
-.ref-button:focus, .clear-button:focus {
-  outline: 2px solid #2196F3;
-  outline-offset: 2px;
-}
-
 .ref-link:focus {
   outline: 2px solid #2196F3;
   outline-offset: 1px;
